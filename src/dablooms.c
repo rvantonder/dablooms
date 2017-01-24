@@ -376,10 +376,12 @@ counting_bloom_t *new_counting_bloom_from_file(unsigned int capacity, double err
     
     if (size != bloom->num_bytes) {
         free_counting_bloom(bloom);
+        close(fd);
         fprintf(stderr, "Error, Actual filesize and expected filesize are not equal\n");
         return NULL;
     }
     if ((bloom->bitmap = new_bitmap(fd, size)) == NULL) {
+        close(fd);
         fprintf(stderr, "Error, Could not create bitmap with file\n");
         free_counting_bloom(bloom);
         return NULL;
@@ -571,6 +573,7 @@ scaling_bloom_t *new_scaling_bloom_from_file(unsigned int capacity, double error
         size -= cur_bloom->num_bytes;
         if (size < 0) {
             free_scaling_bloom(bloom);
+            close(fd);
             fprintf(stderr, "Error, Actual filesize and expected filesize are not equal\n");
             return NULL;
         }
