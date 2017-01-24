@@ -103,6 +103,7 @@ bitmap_t *new_bitmap(int fd, size_t bytes)
     bitmap->array = NULL;
     
     if ((bitmap = bitmap_resize(bitmap, 0, bytes)) == NULL) {
+        bitmap_free(bitmap);
         return NULL;
     }
     
